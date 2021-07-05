@@ -1,0 +1,43 @@
+server {
+    server_name localhost www.localhost;
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/wordpress;
+    index index.php;
+
+    autoindex on;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+    }
+}
+
+server {
+    server_name localhost www.localhost;
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    
+    ssl_certificate /tmp/domain.crt;
+    ssl_certificate_key /tmp/domain.key;
+
+    root /var/www/wordpress;
+    index index.php;
+
+    autoindex on;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+    }
+}
+
